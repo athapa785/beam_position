@@ -24,6 +24,7 @@ class RealTimePlot(QWidget):
         # Create the layout
         self.layout = QGridLayout()
         self.setLayout(self.layout)
+        #self.setGeometry(0, 0, 1920, 1080)
         
         # Max number of data points to save
         self.num_points = 50000
@@ -230,6 +231,8 @@ class RealTimePlot(QWidget):
         self.rm_marker.clicked.connect(self.remove_marker)
         self.layout.addWidget(self.rm_marker, 0, 6)
         
+        self.showMaximized()
+        
         
         
     def timerEvent(self, event):
@@ -252,14 +255,14 @@ class RealTimePlot(QWidget):
         med_y = np.nanmedian(self.ydata2)
         
         if len(self.xdata) < 240:
-            if abs(temp_x) < 5 and abs(temp_y) < 5:
+            if (abs(temp_x) < 10 and abs(temp_y) < 10):
                 self.ydata1.append(temp_x)
                 self.ydata2.append(temp_y)
             else:
                 self.ydata1.append(float('nan'))
                 self.ydata2.append(float('nan'))
         else:
-            if ((temp_x < med_x + 10*sd_x) and (temp_x > med_x - 10*sd_x)) and ((temp_y < med_y + 10*sd_y) and (temp_y > med_y - 10*sd_y)):
+            if ((temp_x < med_x + 10*sd_x) and (temp_x > med_x - 10*sd_x)) and ((temp_y < med_y + 10*sd_y) and (temp_y > med_y - 10*sd_y) or (sd_x*0 != 0) or (sd_y*0 != 0)):
                 self.ydata1.append(temp_x)
                 self.ydata2.append(temp_y)
             else:
